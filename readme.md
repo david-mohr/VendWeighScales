@@ -28,6 +28,13 @@ Two scripts are run: start_cash_drawer_server.vbs and start_weigh_scale_server.v
 	receipt_printer_server.js
 		- starts a node server on localhost:3001
 
+## Roadmap - what's next?
+
+Co-managers have had trouble installing the extension on other / newer computers. 
+It would be great if this process was a bit more user friendly and "foolproof" (just using the expression here, not accusing anyone in particular of being a fool!)
+
+Also the extension seems to stop working intermittently, usually someone like myself has to come in and fix it. JM would love to have a troubleshooting guide so volunteers and coordinators could get it back up and running if it fails.
+
 ## Changelog
 
 24/10/2021 attempt to fix:
