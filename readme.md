@@ -1,6 +1,10 @@
 # Canberra Food Coop's Adaption of Manly Food Co-op's Vend Weigh Scale Extension
 
-How does it work?
+## What is it?
+
+The Vend cloud based POS software has no plans of supporting any kind of weigh scales (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
+
+## How does it work?
 
 Startup script located in C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
 Two scripts are run: start_cash_drawer_server.vbs and start_weigh_scale_server.vbs
