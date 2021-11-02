@@ -1,4 +1,4 @@
-# Food Coop Shop Adaption of Manly Food Co-ops Vend Weigh Scale Extension
+# Canberra Food Coop's Adaption of Manly Food Co-op's Vend Weigh Scale Extension
 
 How does it work?
 
