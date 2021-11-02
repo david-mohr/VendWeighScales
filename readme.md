@@ -28,6 +28,8 @@ Two scripts are run: start_cash_drawer_server.vbs and start_weigh_scale_server.v
 	receipt_printer_server.js
 		- starts a node server on localhost:3001
 
+## Changelog
+
 24/10/2021 attempt to fix:
  - JM moved the scales over to the cafe side and was hoping to get them working on a different computer
  - looks like the problem is the installed version of node on the new machine is 14 and the version on the old till computer is 10
