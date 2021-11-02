@@ -1,0 +1,1 @@
+CreateObject("Wscript.Shell").Run "node C:\Users\user\weigh_scales\weigh_scale_server.js", 0

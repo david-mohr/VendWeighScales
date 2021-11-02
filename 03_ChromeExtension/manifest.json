@@ -1,0 +1,38 @@
+{
+  "name": "FoodCoop-Scales",
+  "description": "Update vend quantity with automatic scale reading and open till drawer. Based on MFC-Scales (Manly Food Coop)",
+  "version": "1.4",
+  "manifest_version": 3,
+
+  "content_scripts": [
+  {
+  "matches": ["https://thefoodcooperativeshop.vendhq.com/webregister/"],
+   "run_at": "document_idle",
+  "js": ["contentscript.js"]
+  }
+],
+  "background":
+    {
+    "scripts": ["background.js","jquery-3.3.1.js"],
+    "persistent": true
+    },
+ "permissions": [
+      "activeTab"
+    ],
+
+  "commands": {
+  
+    "Ctrl+Shift+S": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S"
+      },
+      "description": "Read weight on weigh scale"
+    },
+	"Ctrl+Shift+E": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E"
+      },
+      "description": "Open till draw"
+    }
+  }
+}

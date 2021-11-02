@@ -1,0 +1,1 @@
+CreateObject("Wscript.Shell").Run "node C:\Users\user\weigh_scales\receipt_printer_server.js", 0
