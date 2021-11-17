@@ -36,7 +36,22 @@ It would be great if this process was a bit more user friendly and "foolproof" (
 Also the extension seems to stop working intermittently, usually someone like myself has to come in and fix it. JM would love to have a troubleshooting guide so volunteers and coordinators could get it back up and running if it fails.
 
 ## Changelog
-
+16/11/2021 fixed:
+ - Weigh scale back on old till computer
+ - Tested http://localhost:3000 and seems to work
+ - No chrome extension installed, try to install it
+  - got error: 
+		File
+		~\Dropbox\PointOfSale\Vend\WeighScales\03_ChromeExtension
+		Error
+		The "background.scripts" key cannot be used with manifest_version 3. Use the "background.service_worker" key instead.
+		Could not load manifest.
+ - Got it working!
+    changed manifest.json version to 2 (it was 3 for some reason) which meant the extension installed ok
+    then had to restart chrome and turn the scale on and off
+    test the scale in the browser with http://localhost:3000/scale
+ - Did this all while waiting for the board meeting to start
+    
 24/10/2021 attempt to fix:
  - JM moved the scales over to the cafe side and was hoping to get them working on a different computer
  - looks like the problem is the installed version of node on the new machine is 14 and the version on the old till computer is 10
