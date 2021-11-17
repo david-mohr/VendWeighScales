@@ -1,4 +1,5 @@
-# Canberra Food Coop's Adaption of Manly Food Co-op's Vend Weigh Scale Extension
+# CBR Food Coop's* Vend Weigh Scale Extension
+### *Adapted from Manly Food Coop's Vend Weigh Scale Extension
 
 ## What is it?
 
@@ -32,6 +33,8 @@ Two scripts are run: start_cash_drawer_server.vbs and start_weigh_scale_server.v
 
 Co-managers have had trouble installing the extension on other / newer computers. 
 It would be great if this process was a bit more user friendly and "foolproof" (just using the expression here, not accusing anyone in particular of being a fool!)
+
+Dave has suggested these aims could be achieved by using https://github.com/vercel/pkg to turn the node environment into a windows executable and then https://nssm.cc/ to turn it into a service that will automatically be started again in the event it crashes.
 
 Also the extension seems to stop working intermittently, usually someone like myself has to come in and fix it. JM would love to have a troubleshooting guide so volunteers and coordinators could get it back up and running if it fails.
 
