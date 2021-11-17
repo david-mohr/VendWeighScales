@@ -2,7 +2,7 @@
   "name": "FoodCoop-Scales",
   "description": "Update vend quantity with automatic scale reading and open till drawer. Based on MFC-Scales (Manly Food Coop)",
   "version": "1.4",
-  "manifest_version": 3,
+  "manifest_version": 2,
 
   "content_scripts": [
   {
