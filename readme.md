@@ -3,7 +3,28 @@
 
 ## What is it?
 
-The Vend cloud based POS software has no plans of supporting any kind of weigh scales (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
+The Vend cloud based POS software has [no plans of supporting any kind of weigh scales](https://support.vendhq.com/hc/en-us/articles/360000716176-Can-I-connect-Vend-to-my-weighing-scale-) (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
+
+## Troubleshooting
+
+If the scales don't function in Vend, try the following in this order:
+
+1. Open a new browser tab and go to http://localhost:3000
+
+2. Try reading the scale weight manually from the browser tab
+
+
+## Development
+
+Clone this github repo onto your local machine.
+
+Install or use Node.js *version 10* on your local machine. Check which version of Node you are running with the `node --version` command.
+
+If you have a newer version of Node it might be useful to use [`nvm`](https://github.com/nvm-sh/nvm) to install and manage older versions of Node. Use the command `nvm use 10` and then check again with `node --version` command. Any 10.x version of Node.js should be fine.
+
+Change into the 02_NodeServer directory and run `npm install`
+
+Spin up a weigh scale server with the command `node weigh_scale_server.js` 
 
 ## How does it work?
 
@@ -38,7 +59,14 @@ Dave has suggested these aims could be achieved by using https://github.com/verc
 
 Also the extension seems to stop working intermittently, usually someone like myself has to come in and fix it. JM would love to have a troubleshooting guide so volunteers and coordinators could get it back up and running if it fails.
 
-## Changelog
+## Change History
+
+10/12/2021: 11h45 -> ()
+ - Try and get nssm and pkg worked out so installation and fixing can be much easier.
+
+7/12/2021 broken:
+ - Dave let me know that when plugging and unplugging a USB hub the weigh scales stopped working and in the time he had left he was unable to get them working again.
+
 16/11/2021 fixed:
  - Weigh scale back on old till computer
  - Tested http://localhost:3000 and seems to work
