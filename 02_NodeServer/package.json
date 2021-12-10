@@ -4,7 +4,12 @@
   "description": "Serial server to communicate between CAS-AP1 weigh scale and Chrome Extension for Vend POS",
   "main": "weigh_scale_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pkg:win": "pkg --target node10-win --out-path bin/win weigh_scale_server.js",
+    "pkg:macos": "pkg --target node10-macos --out-path bin/macos weigh_scale_server.js",
+    "pkg:linux": "pkg --target node10-linux --out-path bin/linux weigh_scale_server.js",
+    "pkg:all": "npm run pkg:win && npm run pkg:macos && npm run pkg:linux"
+
   },
   "keywords": [
     "CAS-AP1",
@@ -18,5 +23,8 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "serialport": "^7.1.5"
+  },
+  "engines": {
+    "node": ">=10 <11"
   }
 }
