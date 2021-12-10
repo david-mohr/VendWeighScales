@@ -9,22 +9,105 @@ The Vend cloud based POS software has [no plans of supporting any kind of weigh 
 
 If the scales don't function in Vend, try the following in this order:
 
-1. Open a new browser tab and go to http://localhost:3000
+1. Put something on the weigh scale so that it displays a weight that is not zero (e.g. put an empty jar or a banana on it).
 
-2. Try reading the scale weight manually from the browser tab
+2. Open a new browser tab and go to <http://localhost:3000/scale>
+
+		If you see a message like this:
+
+		```
+		{"scaleWeight":-1,"err":true,"msg":"Couldn't detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try <http://localhost:3000> for more info"}
+		```
+
+		It means that there is something wrong with the weigh scale or its connection to the computer.
+
+		If you see a message like this:
+
+		```
+
+		```
+
+		It means that the scale is working fine and communicating with the computer but there is something wrong with the Chrome Extension.
+
+
+## Installation
+
+If you need to get the weigh scale working on a new system try this:
 
 
 ## Development
 
 Clone this github repo onto your local machine.
 
-Install or use Node.js *version 10* on your local machine. Check which version of Node you are running with the `node --version` command.
+Make sure you have Node.js **version 10** install on your local machine. 
 
-If you have a newer version of Node it might be useful to use [`nvm`](https://github.com/nvm-sh/nvm) to install and manage older versions of Node. Use the command `nvm use 10` and then check again with `node --version` command. Any 10.x version of Node.js should be fine.
+You can heck which version of Node you have by running:
+```shell
+node --version`
+```
 
-Change into the 02_NodeServer directory and run `npm install`
+If you have a newer version of Node it might be useful to use the [Node Version Manager - nvm](https://github.com/nvm-sh/nvm) to install and manage older versions of Node. 
 
-Spin up a weigh scale server with the command `node weigh_scale_server.js` 
+Install `nvm` with the curl or wget commands listed on the github page. On mac I think there is also a homebrew formula you can use.
+
+Once `nvm` is installed, run 
+```shell
+nvm use 10
+```
+to switch to node version 10.
+
+Check that you are now running the correct version of node with
+```shell
+node --version
+```
+Any 10.x version of Node.js should be fine.
+
+Now change into the 02_NodeServer directory and run 
+```shell
+npm install
+```
+
+Spin up a weigh scale server with the command 
+```shell 
+node weigh_scale_server.js
+```
+
+Test that the weigh scale is working properly by opening a browser tab to <http://localhost:3000/scale>
+
+Now you're ready to start modifying weigh_scale_server.js with your changes.
+### Packaging the Node Server as a Windows binary
+
+We use [pkg](https://github.com/vercel/pkg) to package `weigh_scale_server.js` into a windows binary so you don't have to install the correct version of Node on the POS machine.
+
+To package up a binary version of the server do the following...
+
+Get into the server code directory:
+```shell
+cd 02_NodeServer
+```
+
+Switch to Node.js version 10:
+```shell
+nvm use 10
+```
+
+Make sure version 10 is active:
+```shell
+node --version
+```
+
+Install pkg:
+```shell
+npm install -g pkg
+```
+
+Package the binaries:
+```shell
+npm run pkg:all
+```
+
+This above command will run a script defined in package.json which uses pkg to generate binaries of the server for win, mac and linux. The generated binaries can be found in the /bin directory.
+
 
 ## How does it work?
 
