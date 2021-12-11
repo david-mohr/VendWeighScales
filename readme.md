@@ -144,7 +144,13 @@ Also the extension seems to stop working intermittently, usually someone like my
 
 ## Change History
 
-10/12/2021: 11h45 -> ()
+11/12/2021: 12h30 -> 13h30 (1 hour) fixed:
+ - Tested http://localhost:3000/scale and it worked
+ - Checked the Chrome extension and it wasn't turned on, turned it on and everything worked fine.
+ - Couldn't get compiled executable to work on a windows machine
+ - Tried nssm and couldn't work it out either
+
+10/12/2021: 11h45 -> 13h45 (2 hours)
  - Try and get nssm and pkg worked out so installation and fixing can be much easier.
 
 7/12/2021 broken:
