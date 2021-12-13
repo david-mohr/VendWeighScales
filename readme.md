@@ -1,8 +1,21 @@
 # CBR Food Coop's* Vend Weigh Scale Extension
 ### *Adapted from Manly Food Coop's Vend Weigh Scale Extension
 
-## Troubleshooting
+## What is it?
 
+The Vend cloud based POS software has [no plans of supporting any kind of weigh scales](https://support.vendhq.com/hc/en-us/articles/360000716176-Can-I-connect-Vend-to-my-weighing-scale-) (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
+
+
+## Installation
+If you need to get the weigh scale working on a new system try this:
+1. Download the pre-built executable
+2. Download nssm
+3. Install the pre-built executable as a service with nssm
+4. Make sure the weigh scale is hooked up to a USB port with the special cable (this cable is a modified serial cable)
+4. Test that server is working by going to http://localhost:3000/scale
+4. Install the Chrome Extension and enable the extension
+
+## Troubleshooting
 If the scales don't function in Vend, try the following in this order:
 
 1. Put something on the weigh scale so that it displays a weight that is not zero (e.g. put an empty jar or a banana on it).
@@ -30,14 +43,7 @@ If the scales don't function in Vend, try the following in this order:
 3. To check the Chrome Extension side of things, go to the Vend window in Chrome and click on the puzzle icon to see the currently running extensions. Find the extension called `FoodCoop-scales` and make sure its switched on. You are going to have to be in "Developer Mode" to switch this extension on.
 
 4. If none of this works, or is confusing, call for help and/or send and email to the manager!
-## What is it?
 
-The Vend cloud based POS software has [no plans of supporting any kind of weigh scales](https://support.vendhq.com/hc/en-us/articles/360000716176-Can-I-connect-Vend-to-my-weighing-scale-) (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
-
-
-## Installation
-
-If you need to get the weigh scale working on a new system try this:
 
 
 ## Development
