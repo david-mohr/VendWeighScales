@@ -1,7 +1,4 @@
-# CBR Food Coop's* Vend Weigh Scale Extension
-### *Adapted from Manly Food Coop's Vend Weigh Scale Extension
-
-## Troubleshooting
+# Troubleshooting
 If the scales don't function in Vend, try the following in this order:
 
 1. Put something on the weigh scale so that it displays a weight that is not zero (e.g. put an empty jar or a banana on it).
