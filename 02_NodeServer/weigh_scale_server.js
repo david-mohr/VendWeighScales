@@ -1,5 +1,5 @@
-import SerialPort from 'serialport'
-import ByteLength from '@serialport/parser-byte-length'
+import { SerialPort } from 'serialport'
+import { ByteLengthParser } from '@serialport/parser-byte-length'
 import http from 'http'
 
 const weighScaleID = 'Prolific'
@@ -8,55 +8,46 @@ const receiptPrinterID = 'Posiflex Technology Inc'
 // Get server up and running to handle requests for scale weight
 const hostname = '127.0.0.1'
 const httpport = 3000
-let portListText
-let weighScaleCOM // Should be COM26 or similar
-let receiptPrinterCOM // Should be COM27 or similar
 
 const server = http.createServer(onServerRequest)
-
 server.listen(httpport, hostname, () => console.log(`Server running at http://${hostname}:${httpport}/`))
 
-function onServerRequest (req, res) {
+async function onServerRequest (req, res) {
+  const endServerRequest = (outputText) => res.end(outputText)
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
   res.setHeader('Access-Control-Allow-Origin', '*')
 
   if (req.url === '/scale') {
-    detectCOMPorts((portText, weighScale) => readScales(weighScale, endServerRequest))
-    return
+    const { weighScale } = await detectCOMPorts()
+    return readScales(weighScale, endServerRequest)
   }
 
   if (req.url === '/till') {
-    detectCOMPorts((portText, weighScale, receiptPrinter) => openTill(receiptPrinter, endServerRequest))
-    return
+    const { receiptPrinter } = await detectCOMPorts()
+    return openTill(receiptPrinter, endServerRequest)
   }
 
-  detectCOMPorts((portText) => endServerRequest(portText))
-
-  function endServerRequest (outputText) {
-    res.end(outputText)
-  }
+  const { portText } = await detectCOMPorts()
+  endServerRequest(portText)
 }
 
-function detectCOMPorts (onPortsDetected) {
-  weighScaleCOM = undefined
-  receiptPrinterCOM = undefined
-  SerialPort.list((err, ports) => {
-    if (err) return onPortsDetected('Port listing error ' + err.message)
-    portListText = ''
-    ports.forEach((port) => {
-      portListText += JSON.stringify(port) + '\n'
-      if (port.manufacturer === weighScaleID) {
-        portListText += 'Found weigh scale on ' + port.comName + '\n'
-        weighScaleCOM = port.comName
-      }
-      if (port.manufacturer === receiptPrinterID) {
-        portListText += 'Found receipt printer on ' + port.comName + '\n'
-        receiptPrinterCOM = port.comName
-      }
-    })
-    onPortsDetected(portListText, weighScaleCOM, receiptPrinterCOM)
-  })
+async function detectCOMPorts () {
+  let weighScale, receiptPrinter
+  const ports = await SerialPort.list()
+  let portText = ''
+  for (const port of ports) {
+    portText += JSON.stringify(port) + '\n'
+    if (port.manufacturer === weighScaleID) {
+      portText += 'Found weigh scale on ' + port.comName + '\n'
+      weighScale = port.comName
+    }
+    if (port.manufacturer === receiptPrinterID) {
+      portText += 'Found receipt printer on ' + port.comName + '\n'
+      receiptPrinter = port.comName
+    }
+  }
+  return { portText, weighScale, receiptPrinter }
 }
 
 function readScales (comPort, onScaleRead) {
@@ -82,7 +73,7 @@ function readScales (comPort, onScaleRead) {
       return
     }
 
-    const parser = new ByteLength({ length: 1 })
+    const parser = new ByteLengthParser({ length: 1 })
     port.pipe(parser)
     parser.on('data', onPrepare)
     readTimeout = setTimeout(onTimeout, 1000)
