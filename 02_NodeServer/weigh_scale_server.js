@@ -63,20 +63,21 @@ function readScales (comPort) {
     if (!comPort) {
       return reject(new Error('Couldn\'t detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try http://localhost:3000 for more info'))
     }
-    let readWeight = ''
-    let readWeightCount = 0
-
     const port = new SerialPort({ path: comPort, baudRate: 9600, dataBits: 8, parity: 'none', stopBits: 1 }, err => {
       if (err) return reject(err)
     })
     port.on('error', err => {
+      console.log('ERR:', err)
       if (err) return reject(err)
     })
     const parser = new ByteLengthParser({ length: 1 })
     port.pipe(parser)
     parser.on('data', onPrepare)
     const readTimeout = setTimeout(onTimeout, 1000)
-    port.write([0x05])
+    port.write([0x05], err => {
+      console.log('write error:', err)
+      reject(err)
+    })
 
     function onPrepare (readyByte) {
       console.log('PREP:', readyByte)
@@ -89,6 +90,7 @@ function readScales (comPort) {
       }
     }
 
+    let readWeight = ''
     function onReadWeight (weightByte) {
       console.log('WEIGHT(byte):', weightByte)
       readWeight += weightByte
@@ -102,6 +104,7 @@ function readScales (comPort) {
     }
 
     function onTimeout () {
+      console.log('--TIMEOUT--')
       closePort('Error: weigh scales are taking too long. Maybe scales are turned off or unplugged. Try http://localhost:3000 for more info')
     }
 
