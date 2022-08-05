@@ -22,7 +22,7 @@ async function onServerRequest (req, res) {
     const { weighScale } = await detectCOMPorts()
     try {
       const output = await readScales(weighScale)
-      res.end(output)
+      res.end(JSON.stringify(output))
     } catch (err) {
       // TODO
       console.log(err)
@@ -95,7 +95,7 @@ function readScales (comPort) {
       if (readWeight.length >= 15) {
         clearTimeout(readTimeout)
         console.log('WEIGHT:', readWeight)
-        console.log('WEIGHT(str):', readWeight.toString())
+        console.log('WEIGHT(str):', readWeight.toString().substring(3, 10))
         const scaleWeight = parseFloat(readWeight.toString().substring(3, 10))
         closePort('Scale read ok', false, scaleWeight)
       }
