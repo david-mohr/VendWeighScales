@@ -1,45 +1,8 @@
 import { SerialPort } from 'serialport'
 import { ByteLengthParser } from '@serialport/parser-byte-length'
-import http from 'http'
 
 const weighScaleID = 'Prolific'
 const receiptPrinterID = 'Posiflex Technology Inc'
-
-// Get server up and running to handle requests for scale weight
-const hostname = '127.0.0.1'
-const httpport = 3000
-
-const server = http.createServer(onServerRequest)
-server.listen(httpport, hostname, () => console.log(`Server running at http://${hostname}:${httpport}/`))
-
-async function onServerRequest (req, res) {
-  const endServerRequest = (outputText) => res.end(outputText)
-  res.statusCode = 200
-  res.setHeader('Access-Control-Allow-Origin', '*')
-
-  if (req.url === '/scale') {
-    res.setHeader('Content-Type', 'text/plain')
-    const { weighScale } = await detectCOMPorts()
-    try {
-      const output = await readScales(weighScale)
-      res.end(JSON.stringify(output))
-    } catch (err) {
-      // TODO
-      console.log(err)
-      res.end('Didn\'t work')
-    }
-  }
-
-  if (req.url === '/till') {
-    res.setHeader('Content-Type', 'text/plain')
-    const { receiptPrinter } = await detectCOMPorts()
-    return openTill(receiptPrinter, endServerRequest)
-  }
-
-  const { portText } = await detectCOMPorts()
-  res.setHeader('Content-Type', 'text/html')
-  endServerRequest(portText)
-}
 
 async function detectCOMPorts () {
   let weighScale, receiptPrinter
@@ -123,42 +86,14 @@ function readScales (comPort) {
   })
 }
 
-function openTill (comPort, onTillOpened) {
-  if (!comPort) {
-    onTillOpened('Couldn\'t detect COM port for receipt printer. Maybe the printer is turned off or unplugged. Try http://localhost:3000 for more info')
-    return
-  }
-
-  const port = new SerialPort(comPort, { baudRate: 19200, dataBits: 8, parity: 'none', stopBits: 1 }, onPortOpened)
-
-  function onPortOpened (err) {
-    if (err) {
-      onTillOpened('Error opening port for till draw on ' + comPort + '\nError: ' + err.message + '\nTry http://localhost:3000 for more info')
-      return
-    }
-    port.write([0x1b, 0x70, 0x00, 0x32, 0xff], onDataWritten)
-  }
-
-  function onDataWritten (err) {
-    if (err) {
-      closePort(port, 'error on write: ' + err.message, onTillOpened)
-      return
-    }
-    port.drain(onDrained)
-  }
-
-  function onDrained (err) {
-    if (err) {
-      closePort(port, 'error on drain: ' + err.message)
-      return
-    }
-    closePort(port, 'Till was succesfully opened', onTillOpened)
-  }
-
-  function closePort (openPort, msg, onPortClosed) {
-    openPort.close(err => {
-      if (err) { msg += ' and error on closing: ' + err.message }
-      onPortClosed(msg)
-    })
+async function main () {
+  const { weighScale } = await detectCOMPorts()
+  try {
+    const output = await readScales(weighScale)
+    console.log('OUTPUT:', output)
+  } catch (err) {
+    console.log('FAIL:', err)
   }
 }
+
+main()
