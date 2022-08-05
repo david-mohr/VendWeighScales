@@ -23,6 +23,7 @@
   "author": "Manly Food Coop & The Food Coop Shop Canberra",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "pkg": "^5.8.0",
     "serialport": "^10.4.0"
   },
   "engines": {
