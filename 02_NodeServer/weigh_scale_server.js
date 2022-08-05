@@ -20,7 +20,13 @@ async function onServerRequest (req, res) {
 
   if (req.url === '/scale') {
     const { weighScale } = await detectCOMPorts()
-    return readScales(weighScale, endServerRequest)
+    try {
+      const output = await readScales(weighScale)
+      res.end(output)
+    } catch (err) {
+      // TODO
+      res.end('Didn\'t work')
+    }
   }
 
   if (req.url === '/till') {
@@ -39,40 +45,32 @@ async function detectCOMPorts () {
   for (const port of ports) {
     portText += JSON.stringify(port) + '\n'
     if (port.manufacturer === weighScaleID) {
-      portText += 'Found weigh scale on ' + port.comName + '\n'
-      weighScale = port.comName
+      portText += 'Found weigh scale on ' + port.path + '\n'
+      weighScale = port.path
     }
     if (port.manufacturer === receiptPrinterID) {
-      portText += 'Found receipt printer on ' + port.comName + '\n'
-      receiptPrinter = port.comName
+      portText += 'Found receipt printer on ' + port.path + '\n'
+      receiptPrinter = port.path
     }
   }
   return { portText, weighScale, receiptPrinter }
 }
 
-function readScales (comPort, onScaleRead) {
-  function finishScaleRead (msg, err = true, weight = -1) {
-    const retObj = { scaleWeight: weight, err, msg }
-    onScaleRead(JSON.stringify(retObj))
-  }
-
-  if (!comPort) {
-    finishScaleRead('Couldn\'t detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try http://localhost:3000 for more info')
-    return
-  }
-
-  let readTimeout
-  let readWeight = ''
-  let readWeightCount = 0
-
-  const port = new SerialPort(comPort, { baudRate: 9600, dataBits: 8, parity: 'none', stopBits: 1 }, onPortOpened)
-
-  function onPortOpened (err) {
-    if (err) {
-      finishScaleRead('Error opening port for weigh scales on ' + comPort + '\nError: ' + err.message + '\n Try http://localhost:3000 for more info')
-      return
+function readScales (comPort) {
+  return new Promise((resolve, reject) => {
+    if (!comPort) {
+      return reject(new Error('Couldn\'t detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try http://localhost:3000 for more info'))
     }
+    let readTimeout
+    let readWeight = ''
+    let readWeightCount = 0
 
+    const port = new SerialPort({ path: comPort, baudRate: 9600, dataBits: 8, parity: 'none', stopBits: 1 }, err => {
+      if (err) return reject(err)
+    })
+    port.on('error', err => {
+      if (err) return reject(err)
+    })
     const parser = new ByteLengthParser({ length: 1 })
     port.pipe(parser)
     parser.on('data', onPrepare)
@@ -80,6 +78,7 @@ function readScales (comPort, onScaleRead) {
     port.write([0x05])
 
     function onPrepare (readyByte) {
+      console.log('DATA:', readyByte)
       const bReady = ('' + readyByte).charCodeAt(0)
       if (bReady === 0x06) {
         parser.removeListener('data', onPrepare)
@@ -108,10 +107,12 @@ function readScales (comPort, onScaleRead) {
       clearTimeout(readTimeout)
       port.close(err => {
         if (err) { msg += ' and error on closing: ' + err.message }
-        finishScaleRead(msg, errStatus, weight)
+        // finishScaleRead(msg, errStatus, weight)
+        const retObj = { scaleWeight: weight, err: errStatus, msg }
+        resolve(retObj)
       })
     }
-  }
+  })
 }
 
 function openTill (comPort, onTillOpened) {
