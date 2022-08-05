@@ -25,6 +25,7 @@ async function onServerRequest (req, res) {
       res.end(output)
     } catch (err) {
       // TODO
+      console.log(err)
       res.end('Didn\'t work')
     }
   }
@@ -41,9 +42,9 @@ async function onServerRequest (req, res) {
 async function detectCOMPorts () {
   let weighScale, receiptPrinter
   const ports = await SerialPort.list()
-  let portText = ''
+  let portText = '<html><body><a href="/scale">Scale</a><br>'
   for (const port of ports) {
-    portText += JSON.stringify(port) + '\n'
+    portText += `<pre>${JSON.stringify(port)}</pre>`
     if (port.manufacturer === weighScaleID) {
       portText += 'Found weigh scale on ' + port.path + '\n'
       weighScale = port.path
@@ -53,6 +54,7 @@ async function detectCOMPorts () {
       receiptPrinter = port.path
     }
   }
+  portText += '</body></html>'
   return { portText, weighScale, receiptPrinter }
 }
 
@@ -61,7 +63,6 @@ function readScales (comPort) {
     if (!comPort) {
       return reject(new Error('Couldn\'t detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try http://localhost:3000 for more info'))
     }
-    let readTimeout
     let readWeight = ''
     let readWeightCount = 0
 
@@ -74,7 +75,7 @@ function readScales (comPort) {
     const parser = new ByteLengthParser({ length: 1 })
     port.pipe(parser)
     parser.on('data', onPrepare)
-    readTimeout = setTimeout(onTimeout, 1000)
+    const readTimeout = setTimeout(onTimeout, 1000)
     port.write([0x05])
 
     function onPrepare (readyByte) {
