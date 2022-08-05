@@ -79,22 +79,23 @@ function readScales (comPort) {
     port.write([0x05])
 
     function onPrepare (readyByte) {
-      console.log('DATA:', readyByte)
-      const bReady = ('' + readyByte).charCodeAt(0)
-      if (bReady === 0x06) {
+      console.log('PREP:', readyByte)
+      if (readyByte[0] === 0x06) {
         parser.removeListener('data', onPrepare)
         parser.on('data', onReadWeight)
         port.write([0x11])
       } else {
-        closePort('Error: Scale was not ready code ' + bReady)
+        closePort('Error: Scale was not ready code ' + readyByte)
       }
     }
 
     function onReadWeight (weightByte) {
+      console.log('WEIGHT(byte):', weightByte)
       readWeight += weightByte
       readWeightCount++
       if (readWeightCount >= 15) {
         clearTimeout(readTimeout)
+        console.log('WEIGHT:', readWeight)
         const scaleWeight = parseFloat(readWeight.substring(3, 10))
         closePort('Scale read ok', false, scaleWeight)
       }
