@@ -92,11 +92,11 @@ function readScales (comPort) {
     function onReadWeight (weightByte) {
       console.log('WEIGHT(byte):', weightByte)
       readWeight += weightByte
-      readWeightCount++
-      if (readWeightCount >= 15) {
+      if (readWeight.length >= 15) {
         clearTimeout(readTimeout)
         console.log('WEIGHT:', readWeight)
-        const scaleWeight = parseFloat(readWeight.substring(3, 10))
+        console.log('WEIGHT(str):', readWeight.toString())
+        const scaleWeight = parseFloat(readWeight.toString().substring(3, 10))
         closePort('Scale read ok', false, scaleWeight)
       }
     }
