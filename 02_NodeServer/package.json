@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Serial server to communicate between CAS-AP1 weigh scale and Chrome Extension for Vend POS",
   "main": "weigh_scale_server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint *.js",
     "pkg:win": "pkg --target node14-win --out-path bin/win weigh_scale_server.js",
     "pkg:macos": "pkg --target node14-macos --out-path bin/macos weigh_scale_server.js",
     "pkg:linux": "pkg --target node14-linux --out-path bin/linux weigh_scale_server.js",
     "pkg:all": "npm run pkg:win && npm run pkg:macos && npm run pkg:linux"
-
   },
   "keywords": [
     "CAS-AP1",
@@ -26,5 +27,12 @@
   },
   "engines": {
     "node": ">=14"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0"
   }
 }
