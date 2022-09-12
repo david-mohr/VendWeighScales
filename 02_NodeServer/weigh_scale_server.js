@@ -22,11 +22,11 @@ async function onServerRequest (req, res) {
     const { weighScale } = await detectCOMPorts()
     try {
       const output = await readScales(weighScale)
-      res.end(JSON.stringify(output))
+      return res.end(JSON.stringify(output))
     } catch (err) {
       // TODO
       console.log(err)
-      res.end('Didn\'t work')
+      return res.end(err.message || 'Didn\'t work')
     }
   }
 
