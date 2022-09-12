@@ -5,8 +5,7 @@
 
 The Vend cloud based POS software has [no plans of supporting any kind of weigh scales](https://support.vendhq.com/hc/en-us/articles/360000716176-Can-I-connect-Vend-to-my-weighing-scale-) (for selling things like fruit and veg). Amazingly some people at the Manly Food Co-op worked out a way to do it. Manly Food Co-op has the CAS SW-IC RS model weigh scale whereas we in Canberra have the older CAS AP-1. We have adapted their Chrome extension to suit.
 
-
-## Installation
+# Installation
 If you need to get the weigh scale working on a new system try this:
 1. Download the pre-built executable
 2. Download nssm: https://nssm.cc/download
@@ -15,7 +14,7 @@ If you need to get the weigh scale working on a new system try this:
 4. Test that server is working by going to http://localhost:3000/scale
 4. Install the Chrome Extension and enable the extension
 
-## Troubleshooting
+# Troubleshooting
 If the scales don't function in Vend, try the following in this order:
 
 1. Put something on the weigh scale so that it displays a weight that is not zero (e.g. put an empty jar or a banana on it).
@@ -44,13 +43,24 @@ If the scales don't function in Vend, try the following in this order:
 
 4. If none of this works, or is confusing, call for help and/or send and email to the manager!
 
+# Development
 
-
-## Development
+## Quick release guide
+```
+cd app
+yarn pkg:win
+cd ..
+mkdir dist
+cp app/bin/win/weigh_scale_server.exe install.bat dist
+cd dist
+wget https://nssm.cc/release/nssm-2.24.zip
+unzip -j nssm-2.24.zip nssm-2.24/win64/nssm.exe
+rm nssm-2.24.zip
+```
 
 Clone this github repo onto your local machine.
 
-Make sure you have Node.js **version 10** install on your local machine. 
+Make sure you have Node.js **version 14** install on your local machine. 
 
 You can heck which version of Node you have by running:
 ```shell
@@ -63,7 +73,7 @@ Install `nvm` with the curl or wget commands listed on the github page. On mac I
 
 Once `nvm` is installed, run 
 ```shell
-nvm use 10
+nvm use 14
 ```
 to switch to node version 10.
 
@@ -71,11 +81,11 @@ Check that you are now running the correct version of node with
 ```shell
 node --version
 ```
-Any 10.x version of Node.js should be fine.
+Any 14.x version of Node.js should be fine.
 
-Now change into the 02_NodeServer directory and run 
+Now change into the `app` directory and run 
 ```shell
-npm install
+yarn
 ```
 
 Spin up a weigh scale server with the command 
@@ -94,12 +104,12 @@ To package up a binary version of the server do the following...
 
 Get into the server code directory:
 ```shell
-cd 02_NodeServer
+cd app
 ```
 
 Switch to Node.js version 10:
 ```shell
-nvm use 10
+nvm use 14
 ```
 
 Make sure version 10 is active:
@@ -107,14 +117,14 @@ Make sure version 10 is active:
 node --version
 ```
 
-Install pkg:
+Install the dependencies:
 ```shell
-npm install -g pkg
+yarn
 ```
 
 Package the binaries:
 ```shell
-npm run pkg:all
+yarn pkg:win
 ```
 
 This above command will run a script defined in package.json which uses pkg to generate binaries of the server for win, mac and linux. The generated binaries can be found in the /bin directory.
@@ -188,91 +198,3 @@ Install the Chrome Extension
 ----------------------------
 1) go to chrome menu "extentions" and start "developer" model
 2) load "unpacked" manifest from install folder
-
-
-
-
-
-
-
-
-
-
-
-
-
-APPENDIX
---------
-APP.JS code
-const http = require('http');
-//const express = require('express');
-//const app = express();
-
-const hostname = '127.0.0.1';
-const httpport = 3000;
-const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
-
-// path /dev/tty.XXX on Mac/Linux, or COM3 on Windows
-const port = new SerialPort("COM3", { baudRate: 9600, dataBits: 7, parity: 'even', function (err) {
-  if (err) {
-    return console.log('Error opening serial port. Edit APP.JS file: ', err.message)
-} }});
-
-const parser = new Readline();
-
-port.pipe(parser);
-parser.on('data', DataReceived);
-
-
-var scaleWeight;
-var scaleStatus
-var Response;
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  Response = res;
-  res.setHeader('Content-Type', 'text/plain');
-  var payload = GetScaleData();
-  
-  
-});
-
-
-server.listen(httpport, hostname, () => {
-  console.log(`Server running at http://${hostname}:${httpport}/`);
-});
-
-var retryloop = 0;
-
-function GetScaleData() {
-	
-	scaleWeight="";
-	scaleStatus="";
-	retryloop=0;
-	port.write('\x57\x0d');
-	
-
-}
-
-function DataReceived(line)
-{
-	 console.log("]]" + line + "[[");
-	 if (line.indexOf("KG") > -1)
-	 {
-		 scaleWeight = line.substring(0,6);
-	 }
-	 else
-	 {
-		 scaleStatus = line.substring(1,2);
-	 }
-	 
-    if (scaleStatus != "" && scaleWeight != "")
-	{
-		var res = "{scaleWeight: " + scaleWeight + ",scaleStatus: " + scaleStatus + "}";
-		console.log(res);
-		Response.end(res);
-	}
-		
-	
-}
