@@ -16,3 +16,5 @@ cd c:\windows\system32
 nssm install WeighScale C:\windows\system32\weigh_scale_server.exe
 nssm set WeighScale AppExit Default Restart
 sc failure WeighScale reset= 0 actions= restart/0/restart/0/restart/0
+sc start WeighScale
+start "" http://localhost:3000
