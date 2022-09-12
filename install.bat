@@ -11,7 +11,9 @@ if %errorLevel% == 0 (
 
 copy nssm.exe c:\windows\system32
 md "c:\Program Files\WeighScale"
+md "c:\Program Files\WeighScale\chrome"
 copy WeighScale "c:\Program Files\WeighScale"
+copy WeighScale\chrome "c:\Program Files\WeighScale\chrome"
 c:
 cd c:\windows\system32
 nssm install WeighScale "C:\Program Files\WeighScale\weigh_scale_server.exe"
