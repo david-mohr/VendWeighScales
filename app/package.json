@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Serial server to communicate between CAS-AP1 weigh scale and Chrome Extension for Vend POS",
   "main": "weigh_scale_server.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint *.js",

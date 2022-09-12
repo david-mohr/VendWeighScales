@@ -1,6 +1,6 @@
-import { SerialPort } from 'serialport'
-import { ByteLengthParser } from '@serialport/parser-byte-length'
-import http from 'http'
+const { SerialPort } = require('serialport')
+const { ByteLengthParser } = require('@serialport/parser-byte-length')
+const http = require('http')
 
 const weighScaleID = 'Prolific'
 const receiptPrinterID = 'Posiflex Technology Inc'
