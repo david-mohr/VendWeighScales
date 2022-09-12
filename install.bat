@@ -10,10 +10,12 @@ if %errorLevel% == 0 (
 )
 
 copy nssm.exe c:\windows\system32
-copy weigh_scale_server.exe c:\windows\system32
+md "c:\Program Files\WeighScale"
+copy WeighScale "c:\Program Files\WeighScale"
 c:
 cd c:\windows\system32
-nssm install WeighScale C:\windows\system32\weigh_scale_server.exe
+nssm install WeighScale "C:\Program Files\WeighScale\weigh_scale_server.exe"
+nssm set WeighScale AppDirectory "C:\Program Files\WeighScale"
 nssm set WeighScale AppExit Default Restart
 sc failure WeighScale reset= 0 actions= restart/0/restart/0/restart/0
 sc start WeighScale

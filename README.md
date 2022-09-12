@@ -47,15 +47,7 @@ If the scales don't function in Vend, try the following in this order:
 
 ## Quick release guide
 ```
-cd app
-yarn pkg:win
-cd ..
-mkdir dist
-cp app/bin/win/weigh_scale_server.exe install.bat dist
-cd dist
-wget https://nssm.cc/release/nssm-2.24.zip
-unzip -j nssm-2.24.zip nssm-2.24/win64/nssm.exe
-rm nssm-2.24.zip
+./release.sh
 ```
 
 Clone this github repo onto your local machine.
