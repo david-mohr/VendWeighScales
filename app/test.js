@@ -49,7 +49,7 @@ function readScales (comPort) {
         // this is the data we sent, increase the counter and try again
         if (counter > 5) closePort('Error: Scale was not ready code(loop) ' + readyByte)
         counter++
-        port.write([0x05])
+        //port.write([0x05])
       } else {
         closePort('Error: Scale was not ready code ' + readyByte)
       }
