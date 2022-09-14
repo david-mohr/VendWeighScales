@@ -22,7 +22,7 @@ function readScales (comPort) {
     if (!comPort) {
       return reject(new Error('Couldn\'t detect COM port for weigh scales. Maybe scale is turned off or unplugged. Try http://localhost:3000 for more info'))
     }
-    const port = new SerialPort({ path: comPort, baudRate: 9600, dataBits: 7, parity: 'even', stopBits: 1 }, err => {
+    const port = new SerialPort({ path: comPort, baudRate: 9600, dataBits: 8, parity: 'none', stopBits: 1 }, err => {
       if (err) return reject(err)
     })
     port.on('error', err => {
