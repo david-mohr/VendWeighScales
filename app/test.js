@@ -2,10 +2,9 @@ const { SerialPort } = require('serialport')
 const { ByteLengthParser } = require('@serialport/parser-byte-length')
 
 const weighScaleID = 'Prolific'
-const receiptPrinterID = 'Posiflex Technology Inc'
 
 async function detectCOMPorts () {
-  let weighScale, receiptPrinter
+  let weighScale
   const ports = await SerialPort.list()
   for (const port of ports) {
     console.log(JSON.stringify(port))
@@ -17,6 +16,7 @@ async function detectCOMPorts () {
   return { weighScale }
 }
 
+let counter = 0
 function readScales (comPort) {
   return new Promise((resolve, reject) => {
     if (!comPort) {
@@ -45,6 +45,11 @@ function readScales (comPort) {
         parser.removeListener('data', onPrepare)
         parser.on('data', onReadWeight)
         port.write([0x11])
+      } else if (readyByte[0] === 0x05) {
+        // this is the data we sent, increase the counter and try again
+        if (counter > 5) closePort('Error: Scale was not ready code(loop) ' + readyByte)
+        counter++
+        port.write([0x05])
       } else {
         closePort('Error: Scale was not ready code ' + readyByte)
       }
