@@ -1,5 +1,5 @@
-import { SerialPort } from 'serialport'
-import { ByteLengthParser } from '@serialport/parser-byte-length'
+const { SerialPort } = require('serialport')
+const { ByteLengthParser } = require('@serialport/parser-byte-length')
 
 const weighScaleID = 'Prolific'
 const receiptPrinterID = 'Posiflex Technology Inc'
@@ -10,7 +10,7 @@ async function detectCOMPorts () {
   for (const port of ports) {
     console.log(JSON.stringify(port))
     if (port.manufacturer === weighScaleID) {
-      console.log('* Found weigh scale on ' + port.path);
+      console.log('* Found weigh scale on ' + port.path)
       weighScale = port.path
     }
   }
