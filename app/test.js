@@ -7,20 +7,14 @@ const receiptPrinterID = 'Posiflex Technology Inc'
 async function detectCOMPorts () {
   let weighScale, receiptPrinter
   const ports = await SerialPort.list()
-  let portText = '<html><body><a href="/scale">Scale</a><br>'
   for (const port of ports) {
-    portText += `<pre>${JSON.stringify(port)}</pre>`
+    console.log(JSON.stringify(port))
     if (port.manufacturer === weighScaleID) {
-      portText += 'Found weigh scale on ' + port.path + '\n'
+      console.log('* Found weigh scale on ' + port.path);
       weighScale = port.path
     }
-    if (port.manufacturer === receiptPrinterID) {
-      portText += 'Found receipt printer on ' + port.path + '\n'
-      receiptPrinter = port.path
-    }
   }
-  portText += '</body></html>'
-  return { portText, weighScale, receiptPrinter }
+  return { weighScale }
 }
 
 function readScales (comPort) {
