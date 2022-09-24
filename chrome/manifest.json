@@ -6,7 +6,7 @@
 
   "content_scripts": [
   {
-  "matches": ["https://thefoodcooperativeshop.vendhq.com/webregister/"],
+  "matches": ["https://thefoodcooperativeshop.vendhq.com/webregister/","https://alfalfahouse.vendhq.com/webregister/"],
    "run_at": "document_idle",
   "js": ["contentscript.js"]
   }
