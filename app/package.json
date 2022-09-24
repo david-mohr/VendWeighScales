@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint *.js",
     "pkg:win": "pkg --target node14-win --out-path bin/win weigh_scale_server.js",
+    "pkg:test": "pkg --target node14-win --out-path bin/win test.js",
     "pkg:macos": "pkg --target node14-macos --out-path bin/macos weigh_scale_server.js",
     "pkg:linux": "pkg --target node14-linux --out-path bin/linux weigh_scale_server.js",
     "pkg:all": "npm run pkg:win && npm run pkg:macos && npm run pkg:linux"

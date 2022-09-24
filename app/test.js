@@ -49,7 +49,7 @@ function readScales (comPort) {
         // this is the data we sent, increase the counter and try again
         if (counter > 5) closePort('Error: Scale was not ready code(loop) ' + readyByte)
         counter++
-        //port.write([0x05])
+        // port.write([0x05])
       } else {
         closePort('Error: Scale was not ready code ' + readyByte)
       }
@@ -86,9 +86,15 @@ function readScales (comPort) {
 }
 
 async function main () {
-  const { weighScale } = await detectCOMPorts()
+  let scale
+  if (process.argv[2]) {
+    scale = process.argv[2]
+  } else {
+    const { weighScale } = await detectCOMPorts()
+    scale = weighScale
+  }
   try {
-    const output = await readScales(weighScale)
+    const output = await readScales(scale)
     console.log('OUTPUT:', output)
   } catch (err) {
     console.log('FAIL:', err)
