@@ -8,6 +8,7 @@ const receiptPrinterID = 'Posiflex Technology Inc'
 // Get server up and running to handle requests for scale weight
 const hostname = '127.0.0.1'
 const httpport = 3000
+let scale = 'COM3'
 
 const server = http.createServer(onServerRequest)
 server.listen(httpport, hostname, () => console.log(`Server running at http://${hostname}:${httpport}/`))
@@ -19,9 +20,12 @@ async function onServerRequest (req, res) {
 
   if (req.url === '/scale') {
     res.setHeader('Content-Type', 'text/plain')
-    const { weighScale } = await detectCOMPorts()
+    if (!scale) {
+      const { weighScale } = await detectCOMPorts()
+      scale = weighScale
+    }
     try {
-      const output = await readScales(weighScale)
+      const output = await readScales(scale)
       return res.end(JSON.stringify(output))
     } catch (err) {
       // TODO
